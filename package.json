@@ -4,6 +4,7 @@
   "displayName": "Red Hat OpenShift Local",
   "description": "Integration for Red Hat OpenShift Local clusters",
   "version": "2.1.0-next",
+  "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247",
   "type": "module",
   "icon": "icon.png",
   "license": "Apache-2.0",
@@ -139,25 +140,21 @@
     "desk:prepare": "ts-node-esm ./scripts/run.mts prepare",
     "desk:run": "ts-node-esm ./scripts/run.mts run",
     "test": "vitest run --coverage --passWithNoTests",
-    "test:e2e:setup": "xvfb-maybe --auto-servernum --server-args='-screen 0 1280x960x24' --",
-    "test:e2e": "npm run test:e2e:setup npx playwright test tests/src"
+    "test:e2e": "PODMAN_DESKTOP_ARGS='/home/runner/work/crc-extension/crc-extension/podman-desktop/dist/linux-unpacked/podman-desktop' vitest run tests/src/ --pool=threads --poolOptions.threads.singleThread --poolOptions.threads.isolate --no-file-parallelism",
+  }
   },
   "dependencies": {
     "@redhat-developer/rhaccm-client": "^0.0.1"
   },
   "devDependencies": {
     "@podman-desktop/api": "1.12.0",
-    "@playwright/test": "^1.47.1",
-    "@podman-desktop/tests-playwright": "next",
-    "@types/node": "^20.16.10",
+    "@types/node": "^20.16.5",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "@vitest/coverage-v8": "^2.0.5",
     "byline": "^5.0.0",
     "compare-versions": "^6.1.1",
     "copyfiles": "^2.4.1",
-    "cross-env": "7.0.3",
-    "electron": "^32.1.1",
     "eslint": "^8.57.1",
     "got": "^14.4.2",
     "hasha": "^6.0.0",
@@ -166,10 +163,9 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2",
-    "vite": "^5.4.8",
+    "vite": "^5.4.6",
     "vitest": "^2.0.5",
     "which": "^4.0.0",
-    "xvfb-maybe": "^0.2.1",
     "zip-local": "^0.3.5"
   },
   "extensionDependencies": [

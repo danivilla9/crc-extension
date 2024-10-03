@@ -21,7 +21,7 @@ import path from 'node:path';
 const config = {
   test: {
     include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
-    exclude: ['tests/**', '**/builtin/**',
+    exclude: ['**/builtin/**',
       '**/node_modules/**',
       '**/dist/**',
       '**/.{idea,git,cache,output,temp,cdix}/**',

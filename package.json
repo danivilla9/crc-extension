@@ -140,7 +140,7 @@
     "desk:prepare": "ts-node-esm ./scripts/run.mts prepare",
     "desk:run": "ts-node-esm ./scripts/run.mts run",
     "test": "vitest run --coverage --passWithNoTests",
-    "test:e2e": "PODMAN_DESKTOP_ARGS='/home/runner/work/crc-extension/crc-extension/podman-desktop/dist/linux-unpacked/podman-desktop' vitest run tests/src/ --pool=threads --poolOptions.threads.singleThread --poolOptions.threads.isolate --no-file-parallelism",
+    "test:e2e": "vitest run tests/src/ --pool=threads --poolOptions.threads.singleThread --poolOptions.threads.isolate --no-file-parallelism",
   }
   },
   "dependencies": {

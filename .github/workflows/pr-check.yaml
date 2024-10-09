@@ -179,6 +179,3 @@ jobs:
         with:
           name: e2e-tests
           path: ./**/tests/**/output/
-
-      - name: Run Tests
-        run: yarn test

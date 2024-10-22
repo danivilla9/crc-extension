@@ -17,7 +17,7 @@
  ***********************************************************************/
 
 import type { NavigationBar } from '@podman-desktop/tests-playwright';
-import { expect as playExpect, ExtensionCardPage, RunnerOptions, test } from '@podman-desktop/tests-playwright';
+import { expect as playExpect, ExtensionCardPage, RunnerOptions, test, SettingsBar, ResourcesPage, ExtensionDetailsPage } from '@podman-desktop/tests-playwright';
 
 import { OpenShiftLocalExtensionPage } from './model/pages/openshift-local-extension-page';
 
@@ -30,6 +30,7 @@ const extensionLabelAuthentication = 'redhat.redhat-authentication';
 const extensionLabelNameAuthentication = 'redhat-authentication';
 const activeExtensionStatus = 'ACTIVE';
 const disabledExtensionStatus = 'DISABLED';
+const stoppedExtensionStatus = 'STOPPED';
 const skipInstallation = process.env.SKIP_INSTALLATION ? process.env.SKIP_INSTALLATION : false;
 
 test.use({ 
@@ -126,6 +127,29 @@ test.describe.serial('Red Hat OpenShift Local extension verification', () => {
       await extensionCard.enableExtension();
       await playExpect(extensionCard.status).toHaveText(activeExtensionStatus);
     }); 
+  });
+
+  test.describe.serial('UI assets work correctly', () => {
+    test('UI assets from the Dashboard page work correctly',async ({ navigationBar }) => {
+      const dashboard = await navigationBar.openDashboard();
+      //this actually appears two times, not sure why
+      await playExpect(dashboard.openshiftLocalProvider).toBeVisible();
+      await playExpect(dashboard.openshiftLocalStatusLabel).toHaveText(stoppedExtensionStatus);
+    })
+
+    test('UI assets from the Settings page work correctly',async ({ page, navigationBar }) => {
+      await navigationBar.openSettings();
+      const settingsBar = new SettingsBar(page);
+      const resourcesPage = await settingsBar.openTabPage(ResourcesPage);
+      const openShiftLocalCard = resourcesPage.featuredProviderResources.getByRole('region', {
+        name: 'crc',
+      });
+      await playExpect(openShiftLocalCard.getByLabel("OpenShift Local")).toBeVisible({timeout: 30000});
+      await playExpect(openShiftLocalCard.getByLabel("Connection Status Label")).toHaveText('OFF');
+      const openShiftLocalDetailsButton = openShiftLocalCard.getByLabel("OpenShift Local details");
+      await openShiftLocalDetailsButton.click();
+      //check the details page is correct
+    })
   });
 
   test('OpenShift Local extension can be removed', async ({ navigationBar }) => {

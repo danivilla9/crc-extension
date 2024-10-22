@@ -17,7 +17,7 @@
  ***********************************************************************/
 
 import type { NavigationBar } from '@podman-desktop/tests-playwright';
-import { expect as playExpect, ExtensionCardPage, RunnerOptions, test, SettingsBar, ResourcesPage, ExtensionDetailsPage } from '@podman-desktop/tests-playwright';
+import { expect as playExpect, ExtensionCardPage, RunnerOptions, test, SettingsBar, ResourcesPage } from '@podman-desktop/tests-playwright';
 
 import { OpenShiftLocalExtensionPage } from './model/pages/openshift-local-extension-page';
 
@@ -135,7 +135,7 @@ test.describe.serial('Red Hat OpenShift Local extension verification', () => {
       //this actually appears two times, not sure why
       await playExpect(dashboard.openshiftLocalProvider).toBeVisible();
       await playExpect(dashboard.openshiftLocalStatusLabel).toHaveText(stoppedExtensionStatus);
-    })
+    });
 
     test('UI assets from the Settings page work correctly',async ({ page, navigationBar }) => {
       await navigationBar.openSettings();
@@ -144,12 +144,12 @@ test.describe.serial('Red Hat OpenShift Local extension verification', () => {
       const openShiftLocalCard = resourcesPage.featuredProviderResources.getByRole('region', {
         name: 'crc',
       });
-      await playExpect(openShiftLocalCard.getByLabel("OpenShift Local")).toBeVisible({timeout: 30000});
-      await playExpect(openShiftLocalCard.getByLabel("Connection Status Label")).toHaveText('OFF');
-      const openShiftLocalDetailsButton = openShiftLocalCard.getByLabel("OpenShift Local details");
+      await playExpect(openShiftLocalCard.getByLabel('OpenShift Local')).toBeVisible({timeout: 30000});
+      await playExpect(openShiftLocalCard.getByLabel('Connection Status Label')).toHaveText('OFF');
+      const openShiftLocalDetailsButton = openShiftLocalCard.getByLabel('OpenShift Local details');
       await openShiftLocalDetailsButton.click();
       //check the details page is correct
-    })
+    });
   });
 
   test('OpenShift Local extension can be removed', async ({ navigationBar }) => {

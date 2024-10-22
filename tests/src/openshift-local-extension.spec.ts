@@ -135,6 +135,7 @@ test.describe.serial('Red Hat OpenShift Local extension verification', () => {
       //this actually appears two times, not sure why
       await playExpect(dashboard.openshiftLocalProvider).toBeVisible();
       await playExpect(dashboard.openshiftLocalStatusLabel).toHaveText(stoppedExtensionStatus);
+      await playExpect(dashboard.page.getByRole('button', {name: 'Run OpenShift Local'})).toBeEnabled();
     });
 
     test('UI assets from the Settings page work correctly',async ({ page, navigationBar }) => {
@@ -144,11 +145,11 @@ test.describe.serial('Red Hat OpenShift Local extension verification', () => {
       const openShiftLocalCard = resourcesPage.featuredProviderResources.getByRole('region', {
         name: 'crc',
       });
-      await playExpect(openShiftLocalCard.getByLabel('OpenShift Local')).toBeVisible({timeout: 30000});
+      await playExpect(openShiftLocalCard.getByLabel(/^OpenShift Local$/)).toBeVisible();
       await playExpect(openShiftLocalCard.getByLabel('Connection Status Label')).toHaveText('OFF');
       const openShiftLocalDetailsButton = openShiftLocalCard.getByLabel('OpenShift Local details');
       await openShiftLocalDetailsButton.click();
-      //check the details page is correct
+      //check the details page...
     });
   });
 

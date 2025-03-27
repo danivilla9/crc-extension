@@ -78,7 +78,7 @@ jobs:
     name: windows-${{ matrix.windows-version }}-${{ matrix.windows-featurepack }}
     runs-on: ubuntu-latest
     env:
-      MAPT_VERSION: v0.8.0
+      MAPT_VERSION: v0.8.2
       MAPT_IMAGE: quay.io/redhat-developer/mapt
     strategy:
       fail-fast: false

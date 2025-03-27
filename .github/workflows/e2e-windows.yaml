@@ -223,6 +223,25 @@ jobs:
         # check logs
         podman logs -f pde2e-podman-run
 
+    - name: Install CRC on host
+      run: |
+        podman run --rm -d --name crc-win-support \
+          -e TARGET_HOST=$(cat host) \
+          -e TARGET_HOST_USERNAME=$(cat username) \
+          -e TARGET_HOST_KEY_PATH=/data/id_rsa \
+          -e TARGET_FOLDER=crc-support \
+          -e TARGET_CLEANUP='false' \
+          -e OUTPUT_FOLDER=/data \
+          -e DEBUG='true' \
+          -v ${PWD}:/data:z \
+          -v ${PWD}/crc-windows-installer.zip:/opt/crc-support/crc-windows-installer.zip:z \
+          quay.io/rhqp/crc-support:v0.5-windows crc-support/run.ps1 \
+            -targetPath "/Users/$(cat username)/crc-support" \
+            -download 'false' \
+            -install 'true' \
+            -forceFresh 'false'
+        podman logs -f crc-win-support
+
     - name: Run OpenShift Local Extension Playwright E2E tests
       run: |
         podman run -d --name pde2e-runner-run \

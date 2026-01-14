@@ -96,6 +96,8 @@ jobs:
           version=$(npm view @podman-desktop/tests-playwright@next version)
           echo "Version of @podman-desktop/tests-playwright to be used: $version"
           jq --arg version "$version" '.devDependencies."@podman-desktop/tests-playwright" = $version' package.json > package.json_tmp && mv package.json_tmp package.json
+          # Delete lockfile since package.json was updated, pnpm will regenerate it
+          rm -f pnpm-lock.yaml
         shell: bash
 
       - name: Ensure getting current HEAD version of the test framework (Windows)
@@ -115,6 +117,8 @@ jobs:
           jq --arg version "$version" '.devDependencies."@podman-desktop/tests-playwright" = $version' package.json > package.json_tmp
           # Replace the old package.json with the updated one
           Move-Item -Path package.json_tmp -Destination package.json -Force
+          # Delete lockfile since package.json was updated, pnpm will regenerate it
+          Remove-Item -Path pnpm-lock.yaml -Force -ErrorAction SilentlyContinue
         shell: pwsh
 
       - name: Revert unprivileged user namespace restrictions in Ubuntu 24.04
@@ -127,7 +131,7 @@ jobs:
         if: matrix.os == 'ubuntu-24.04'
         working-directory: ./crc-extension
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install
           # build crc extension
           podman build -t openshift_local_image . -f ./oci/Containerfile.multistage
           CONTAINER_ID_CRC=$(podman create localhost/openshift_local_image --entrypoint "")
@@ -150,7 +154,7 @@ jobs:
         shell: bash
         working-directory: ./crc-extension
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install
           # -- following https://github.com/crc-org/crc-extension/blob/main/oci/Containerfile.multistage --
           # build extension
           pnpm build
@@ -165,7 +169,7 @@ jobs:
         working-directory: ./crc-extension
         shell: pwsh
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install
           # -- following https://github.com/crc-org/crc-extension/blob/main/oci/Containerfile.multistage --
           # build extension
           pnpm build
